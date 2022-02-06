@@ -1,0 +1,32 @@
+body {
+  background-color: #c4c8c9;
+}
+
+.chats {
+  display: flex;
+}
+
+.chatList {
+  width: 250px;
+  display: block;
+
+  a {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid black;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.chatNameBox {
+  padding: 20px;
+  display: block;
+
+  button {
+    display: block;
+  }
+}
+
