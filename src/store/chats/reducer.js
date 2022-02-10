@@ -1,4 +1,4 @@
-import { ADD_CHAT, DELETE_CHAT } from "./actions";
+import { ADD_CHAT, DELETE_CHAT } from './actions';
 
 const initialState = {
     chatList: [],
@@ -9,7 +9,7 @@ const chatsReducer = (state = initialState, action) => {
         case ADD_CHAT:
             return {
                 ...state,
-                shatList: [
+                сhatList: [
                     ...state.chatList,
                     {
                         id: `id${state.chatList.length}`,
@@ -25,7 +25,7 @@ const chatsReducer = (state = initialState, action) => {
                     ...state.chatList.slice(action.index + 1)
                 ]
             }
-            
+
         default:
             return state;
     }

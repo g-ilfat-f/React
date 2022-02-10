@@ -1,50 +1,30 @@
 import { Box, Fab, TextField } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { addMessage } from '../store/messages/actions';
+import { addMessageSaga } from '../store/messages/actions';
 
 
 const ControlPanel = () => {
     const [value, setValue] = useState('');
-    const messages = useSelector(state => state.messages.messageList);
     const profileName = useSelector(state => state.profile.name);
-    const disparch = useDispatch();
+    const dispatch = useDispatch();
     const { chatId } = useParams();
 
     const handleChange = useCallback((event) => {
         const valueFormInput = event.target.value;
         setValue(valueFormInput);
-    }, []);
+    }, [value]);
 
-    const sendMessage = (message, author) => {
-        disparch(addMessage(chatId, {
-            text: message,
-            author: author
+    const handleButton = useCallback(() => {
+        dispatchEvent(addMessageSaga(chatId, {
+            text: value,
+            author: profileName
         }));
         setValue('');
-    };
-
-    const handleButton = () => {
-        sendMessage(value, profileName);
-    };
-
-    useEffect(() => {
-        let timer;
-        const currentChat = messages[chatId];
-        if (currentChat?.length > 0 && currentChat[currentChat?.length - 1]?.author === profileName) {
-            timer = setInterval(() => {
-                const currentMessage = 'Привет!';
-                sendMessage(currentMessage, 'bot');
-            }, 1000)
-        }
-        return () => {
-            clearTimeout(timer);
-        };
-    }, [messages[chatId]]);
-
+    }, [value, chatId, dispatch]);
 
     return <>
         <Box

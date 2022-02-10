@@ -15,7 +15,7 @@ const ChatList = () => {
     const handleOpen = () => {
         setVisible(true);
     };
-    
+
     const handleClose = () => {
         setVisible(false);
     };
