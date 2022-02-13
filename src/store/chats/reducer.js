@@ -9,7 +9,7 @@ const chatsReducer = (state = initialState, action) => {
         case ADD_CHAT:
             return {
                 ...state,
-                сhatList: [
+                chatList: [
                     ...state.chatList,
                     {
                         id: `id${state.chatList.length}`,

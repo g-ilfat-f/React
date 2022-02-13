@@ -19,7 +19,7 @@ const ControlPanel = () => {
     }, [value]);
 
     const handleButton = useCallback(() => {
-        dispatchEvent(addMessageSaga(chatId, {
+        dispatch(addMessageSaga(chatId, {
             text: value,
             author: profileName
         }));
