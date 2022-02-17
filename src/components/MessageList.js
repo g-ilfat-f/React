@@ -1,17 +1,32 @@
 import { Avatar, ListItemAvatar, ListItemText, Box, List, ListItem } from "@mui/material";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { PropTypes } from 'prop-types';
 import { Adb, Face } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { getDatabase, get, ref, child } from 'firebase/database';
+import firebase from "../service/firebase";
 
 
 
 const MessageList = () => {
+    const [messages, setMessages] = useState([]);
     const profileName = useSelector(state => state.profile.name);
-    const messages = useSelector(state => state.messages.messageList);
     let { chatId } = useParams();
-    const getMessagesById = messages[chatId];
+
+    useEffect(() => {
+        const db = getDatabase(firebase);
+        const dbRef = ref(db)
+        get(child(dbRef, '/messages/${chatId}'))
+            .then((snapshot) => {
+                if (snapshot.exists()) {
+                    const msg = Object.values(snapshot.val());
+                    setMessages(msg)
+                } else {
+                    console.error('error')
+                }
+            });
+    }, [chatId]);
 
     const renderMessage = useCallback((message, index) => {
         return (
@@ -38,7 +53,7 @@ const MessageList = () => {
                 overflow: 'auto'
             }}>
             <List sx={{ md: 2 }}>
-                {getMessagesById?.map((message, index) => renderMessage(message, index))}
+                {messages.map((message, index) => renderMessage(message, index))}
             </List>
         </Box>
     );

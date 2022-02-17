@@ -1,17 +1,15 @@
 import React from "react";
 import Routers from "./pages/Routers";
 import { Provider } from "react-redux";
-import { store, persistor } from "./store";
-import { PersistGate } from 'redux-persist/integration/react';
-import { CircularProgress } from '@mui/material';
-
+import { store } from "./store";
+import { AuthProvider } from "./hook/useAuth";
 
 const App = () => {
     return (
         <Provider store={store}>
-            <PersistGate persistor={persistor} loading={<CircularProgress />} >
+            <AuthProvider>
                 <Routers />
-            </PersistGate>
+            </AuthProvider>
         </Provider>
     );
 };

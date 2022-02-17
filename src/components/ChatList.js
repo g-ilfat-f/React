@@ -1,16 +1,16 @@
 import { Button, Dialog, TextField, DialogTitle } from '@mui/material';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { addChat, deleteChat } from '../store/chats/actions';
-import { Delete } from '@mui/icons-material';
+import { Delete, StackedLineChartSharp } from '@mui/icons-material';
+import { getDatabase, ref, push, set, get, child, remove } from 'firebase/database';
+import firebase from '../service/firebase';
+import { useSelector } from 'react-redux';
 
 const ChatList = () => {
-    const chats = useSelector(state => state.chats.chatList);
+    const [chats, setChats] = useState([]);
     const { chatId } = useParams();
     const [visible, setVisible] = useState(false);
     const [newChatName, setNewChatName] = useState('');
-    const dispatch = useDispatch();
 
     const handleOpen = () => {
         setVisible(true);
@@ -23,14 +23,37 @@ const ChatList = () => {
     const handleChange = (e) => setNewChatName(e.target.value);
 
     const onAddChat = () => {
-        dispatch(addChat(newChatName));
+        const db = getDatabase(firebase);
+        const chatRef = ref(db, '/chats');
+        const newChatRef = push(chatRef);
+        set(newChatRef, { name: newChatName }).then((res) => { console.log(res) })
+
         setNewChatName('');
         handleClose();
     };
 
-    const handleDelete = (index) => {
-        dispatch(deleteChat(index));
-    }
+    const handleDelete = (id) => {
+        const db = getDatabase(firebase);
+        const chatRef = ref(db, '/chats/${id}');
+        const messagesRef = ref(db, '/messages/${id}');
+        remove(chatRef).then(res => console.log('removed chat', res));
+        remove(messagesRef).then(res => console.log('removed msg'));
+    };
+
+    useEffect(() => {
+        const db = getDatabase(firebase);
+        const dbRef = ref(db);
+        get(child(dbRef, '/chats')).then((snapshot) => {
+            if (snapshot.exists()) {
+                const obj = snapshot.val();
+                const chatIds = Object.keys(obj);
+                const chatArr = chatIds.map(item => ({ id: item, name: obj[item].name }))
+                StackedLineChartSharp(chatArr);
+            } else {
+                console.log('no data')
+            }
+        });
+    }, []);
 
     return (
         <div className={'chatList'}>
@@ -40,7 +63,7 @@ const ChatList = () => {
                         <b style={{ color: chat.id === chatId ? 'black' : 'grey' }}>
                             {chat.name}
                         </b>
-                        <Button onClick={() => handleDelete(index)}>
+                        <Button onClick={() => handleDelete(chat.id)}>
                             <Delete />
                         </Button>
                     </Link>

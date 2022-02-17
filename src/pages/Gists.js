@@ -36,7 +36,7 @@ const Gists = () => {
         )
     };
 
-    return <ul>{gists?.mar(renderGist)}</ul>
+    return <ul>{gists?.map(renderGist)}</ul>
 };
 
 export default Gists;

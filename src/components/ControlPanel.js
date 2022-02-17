@@ -2,15 +2,16 @@ import { Box, Fab, TextField } from '@mui/material';
 import { Send } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { addMessageSaga } from '../store/messages/actions';
+import firebase from '../service/firebase';
+import { getDatabase, ref, push, set } from 'firebase/database';
+
 
 
 const ControlPanel = () => {
     const [value, setValue] = useState('');
-    const profileName = useSelector(state => state.profile.name);
-    const dispatch = useDispatch();
+    const profileName = useSelector(state => state.profile.name)
     const { chatId } = useParams();
 
     const handleChange = useCallback((event) => {
@@ -19,12 +20,18 @@ const ControlPanel = () => {
     }, [value]);
 
     const handleButton = useCallback(() => {
-        dispatch(addMessageSaga(chatId, {
+        const message = {
             text: value,
             author: profileName
-        }));
+        }
+
+        const db = getDatabase(firebase);
+        const messageRef = ref(db, '/messages/${chatId}');
+        const newMessageRef = push(messageRef);
+        set(newMessageRef, message).then((res) => console.log(res));
+
         setValue('');
-    }, [value, chatId, dispatch]);
+    }, [value, chatId]);
 
     return <>
         <Box
