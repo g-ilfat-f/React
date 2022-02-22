@@ -17,7 +17,7 @@ const MessageList = () => {
     useEffect(() => {
         const db = getDatabase(firebase);
         const dbRef = ref(db)
-        get(child(dbRef, '/messages/${chatId}'))
+        get(child(dbRef, `/messages/${chatId}`))
             .then((snapshot) => {
                 if (snapshot.exists()) {
                     const msg = Object.values(snapshot.val());

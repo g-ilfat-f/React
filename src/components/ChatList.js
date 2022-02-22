@@ -1,7 +1,7 @@
 import { Button, Dialog, TextField, DialogTitle } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Delete, StackedLineChartSharp } from '@mui/icons-material';
+import { Delete, setChats } from '@mui/icons-material';
 import { getDatabase, ref, push, set, get, child, remove } from 'firebase/database';
 import firebase from '../service/firebase';
 import { useSelector } from 'react-redux';
@@ -34,8 +34,8 @@ const ChatList = () => {
 
     const handleDelete = (id) => {
         const db = getDatabase(firebase);
-        const chatRef = ref(db, '/chats/${id}');
-        const messagesRef = ref(db, '/messages/${id}');
+        const chatRef = ref(db, `/chats/${id}`);
+        const messagesRef = ref(db, `/messages/${id}`);
         remove(chatRef).then(res => console.log('removed chat', res));
         remove(messagesRef).then(res => console.log('removed msg'));
     };
@@ -48,7 +48,7 @@ const ChatList = () => {
                 const obj = snapshot.val();
                 const chatIds = Object.keys(obj);
                 const chatArr = chatIds.map(item => ({ id: item, name: obj[item].name }))
-                StackedLineChartSharp(chatArr);
+                setChats(chatArr);
             } else {
                 console.log('no data')
             }

@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CHANGE_NAME } from "../store/profile/chatActions";
+import { useParams } from 'react-router-dom';
 
 const Profile = () => {
     const name = useSelector(state => state.profile);

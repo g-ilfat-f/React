@@ -12,6 +12,7 @@ import RequiredAuth from '../hocs/RequiredAuth';
 import SignUp from './SignUp';
 import Login from './Login';
 import useAuth from '../hook/useAuth';
+import { formatTimeStrings } from '../utils/formatTimeStrings';
 
 
 const Routers = () => {
@@ -19,6 +20,8 @@ const Routers = () => {
 
     return (
         <div className='menuApp'>
+            <div>Great Text</div>
+            <div>{formatTimeStrings(['12.02'])}</div>
             <Box sx={{ display: 'flex' }}>
                 <Paper elevation={0} sx={{ minWidth: 250, display: 'flex' }}>
                     <ListItem disablePadding>
@@ -67,10 +70,11 @@ const Routers = () => {
                     <Route path='/' exact element={<Home message={'Privet'} />} />
                     <Route path='/login' exact element={<Login />} />
                     <Route path='/signup' exact element={<SignUp />} />
+                    <Route path='/gists' element={<Gists />} />
                     <Route element={<RequiredAuth />} >
                         <Route path='/chats/' exact element={<NoChats />} />
+                        <Route path='/chats/:chatId' exact element={<Chats />} />
                         <Route path='/profile' element={<Profile />} />
-                        <Route path='/gists' element={<Gists />} />
                     </Route>
                     <Route path='*' element={<NoChats />} />
                 </Routes>

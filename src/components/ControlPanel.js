@@ -38,7 +38,7 @@ const ControlPanel = () => {
             sx={{
                 marginTop: '20px'
             }}
-            component='from'
+            component='form'
             noValidate
             autoComplete='off'
             flexDirection='row'

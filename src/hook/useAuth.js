@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
     let signin = async (newUser, callback) => {
         const auth = getAuth(firebase);
         await signInWithEmailAndPassword(auth, newUser.email, newUser.password);
-        await onAuthStateChanged(auth, (eser) => {
+        await onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
             }

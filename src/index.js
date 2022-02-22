@@ -5,6 +5,7 @@ import './App.scss';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import ForTest from './ForTest';
 
 
 
@@ -20,7 +21,7 @@ const theme = createTheme({
 });
 
 
-ReactDOM.render (
+ReactDOM.render(
   <ThemeProvider theme={theme}>
     <BrowserRouter>
       <App />
